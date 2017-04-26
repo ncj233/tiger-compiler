@@ -18,7 +18,7 @@ while, for, to, break, let, in, end, function, var, type, array, if, then, else,
 
 **注释** 
 
-注释可以出现在任意两个单词之间。注释以 /* 开始，以 /* 结束，并且可以嵌套。
+注释可以出现在任意两个单词之间。注释以 /* 开始，以 */  结束，并且可以嵌套。
 
 **整型文字常数**
 
