@@ -53,6 +53,7 @@ void EM_error(int pos, char *message,...)
   va_end(ap);
   fprintf(stderr,"\n");
 
+  exit(-1);
 }
 
 void EM_reset(string fname)

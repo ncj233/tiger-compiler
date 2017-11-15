@@ -1,7 +1,9 @@
 %{
 #include <string.h>
 #include "util.h"
-#include "tokens.h"
+#include "symbol.h"
+#include "absyn.h"
+#include "y.tab.h"
 #include "errormsg.h"
 
 #include <stdio.h>
@@ -20,6 +22,8 @@ void adjust(void)
  EM_tokPos=charPos;
  charPos+=yyleng;
 }
+
+char *string_convert(const char *text);
 
 %}
 
@@ -75,7 +79,11 @@ comment "/*"([^\*]|(\*)*[^\*/])*(\*)*"*/"
 "of"	{adjust(); return OF;}
 "nil"	{adjust(); return NIL;}
 
-{id}    {adjust(); yylval.sval = yytext; return ID;}
+{id}    {adjust();
+		char *idstr = malloc((strlen(yytext) + 1) * sizeof(char));
+		strcpy(idstr, yytext);
+		yylval.sval = idstr;
+		return ID;}
 {integer}   {adjust(); yylval.ival = atoi(yytext); return INT;}
 {string}   {adjust();
 			yylval.sval = string_convert(yytext);
@@ -88,7 +96,7 @@ comment "/*"([^\*]|(\*)*[^\*/])*(\*)*"*/"
 {comment}   {
 			adjust();
 			for (const char *p = yytext; *p; p++) {
-				if (*p != '\n') {
+				if (*p == '\n') {
 					EM_newline();
 				}
 			}
